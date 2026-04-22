@@ -1,0 +1,12 @@
+{
+    "name": "template/admin-management",
+    "description": "TEMPLATE Admin Management System",
+    "require": {
+        "phpmailer/phpmailer": "^6.9",
+        "phpoffice/phpspreadsheet": "^5.4",
+        "dompdf/dompdf": "^3.1"
+    },
+    "config": {
+        "vendor-dir": "vendor"
+    }
+}

@@ -1,0 +1,73 @@
+# =====================================================
+# TEMPLATE APPLICATION - ROOT HTACCESS
+# Protect sensitive directories and route to public
+# =====================================================
+
+# Enable rewrite engine
+RewriteEngine On
+
+# =====================================================
+# CUSTOM ERROR PAGES
+# =====================================================
+ErrorDocument 400 /public/errors/400.php
+ErrorDocument 401 /public/errors/401.php
+ErrorDocument 403 /public/errors/403.php
+ErrorDocument 404 /public/errors/404.php
+ErrorDocument 500 /public/errors/500.php
+ErrorDocument 502 /public/errors/502.php
+ErrorDocument 503 /public/errors/503.php
+ErrorDocument 504 /public/errors/504.php
+
+# =====================================================
+# BLOCK ACCESS TO SENSITIVE DIRECTORIES
+# =====================================================
+# Rewrite to custom 403 error page instead of Apache default
+RewriteRule ^core/ public/errors/403.php [L]
+RewriteRule ^config/ public/errors/403.php [L]
+RewriteRule ^logs/ public/errors/403.php [L]
+# RewriteRule ^public/assets/ public/errors/403.php [L]
+# RewriteRule ^public/css/ public/errors/403.php [L]
+# RewriteRule ^public/errors/ public/errors/403.php [L]
+# RewriteRule ^public/image/ public/errors/403.php [L]
+# RewriteRule ^public/include/ public/errors/403.php [L]
+# RewriteRule ^public/js/ public/errors/403.php [L]
+# RewriteRule ^public/uploads/ public/errors/403.php [L]
+
+# Block direct access to include files (layout, session, etc.)
+RewriteRule ^include/ public/errors/403.php [L]
+
+# =====================================================
+# BLOCK SENSITIVE FILES
+# =====================================================
+# Block access to hidden files (starting with .)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Block access to sensitive file extensions
+<FilesMatch "\.(env|log|ini|sql|bak|config|md|json|lock|yml|yaml)$">
+    Require all denied
+</FilesMatch>
+
+# =====================================================
+# PREVENT DIRECTORY LISTING
+# =====================================================
+Options -Indexes
+
+# =====================================================
+# BLOCK PHP EXECUTION IN UPLOADS DIRECTORY
+# Prevents uploaded files from being executed as PHP scripts
+# =====================================================
+RewriteRule ^public/uploads/.*\.(php|php3|php4|php5|php7|php8|phtml|phar)$ public/errors/403.php [L,NC]
+
+# Also block server-side scripts via FilesMatch in the uploads path context:
+# (Handled via public/uploads/.htaccess for deeper coverage)
+
+# =====================================================
+# ROUTE ALL REQUESTS TO PUBLIC FOLDER
+# =====================================================
+# If requesting a file that doesn't exist, redirect to public
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]

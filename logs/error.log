@@ -1,0 +1,52 @@
+[2026-04-04 09:05:15] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Call to undefined method SecurityHeaders::isInitialized() in [app]\public\include\rbac_init.php on line 28
+Stack trace:
+#0 [app]\public\index.php(8): require_once()
+#1 {main}
+[2026-04-04 09:05:27] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Call to undefined method SecurityHeaders::isInitialized() in [app]\public\include\rbac_init.php on line 28
+Stack trace:
+#0 [app]\public\index.php(8): require_once()
+#1 {main}
+[2026-04-04 09:05:30] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Call to undefined method SecurityHeaders::isInitialized() in [app]\public\include\rbac_init.php on line 28
+Stack trace:
+#0 [app]\public\index.php(8): require_once()
+#1 {main}
+[2026-04-04 09:05:35] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Call to undefined method SecurityHeaders::isInitialized() in [app]\public\include\rbac_init.php on line 28
+Stack trace:
+#0 [app]\public\index.php(8): require_once()
+#1 {main}
+[2026-04-04 09:06:31] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Call to undefined method SecurityHeaders::isInitialized() in [app]\public\include\rbac_init.php on line 28
+Stack trace:
+#0 [app]\public\index.php(8): require_once()
+#1 {main}
+[2026-04-04 09:06:33] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Call to undefined method SecurityHeaders::isInitialized() in [app]\public\include\rbac_init.php on line 28
+Stack trace:
+#0 [app]\public\index.php(8): require_once()
+#1 {main}
+[2026-04-04 09:06:34] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Call to undefined method SecurityHeaders::isInitialized() in [app]\public\include\rbac_init.php on line 28
+Stack trace:
+#0 [app]\public\index.php(8): require_once()
+#1 {main}
+[2026-04-04 09:28:19] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Class "AccountManager" not found in [app]\public\index.php on line 20
+Stack trace:
+#0 {main}
+[2026-04-04 09:28:21] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Class "AccountManager" not found in [app]\public\index.php on line 20
+Stack trace:
+#0 {main}
+[2026-04-04 09:28:22] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Class "AccountManager" not found in [app]\public\index.php on line 20
+Stack trace:
+#0 {main}
+[2026-04-04 09:28:24] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Class "AccountManager" not found in [app]\public\index.php on line 20
+Stack trace:
+#0 {main}
+[2026-04-04 09:28:25] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Class "AccountManager" not found in [app]\public\index.php on line 20
+Stack trace:
+#0 {main}
+[2026-04-04 09:28:28] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Class "AccountManager" not found in [app]\public\index.php on line 20
+Stack trace:
+#0 {main}
+[2026-04-04 09:28:29] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Class "AccountManager" not found in [app]\public\index.php on line 20
+Stack trace:
+#0 {main}
+[2026-04-04 09:49:51] [EXCEPTION] [127.0.0.1] [/index.php] Uncaught Error: Class "AccountManager" not found in [app]\public\index.php on line 20
+Stack trace:
+#0 {main}

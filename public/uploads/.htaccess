@@ -1,0 +1,17 @@
+# Block execution of all server-side scripts in uploads (defense-in-depth)
+<FilesMatch "\.(php|php3|php4|php5|php7|php8|phtml|phar|pl|py|jsp|asp|sh|cgi)$">
+    Require all denied
+</FilesMatch>
+
+# Disable CGI/script handler for this directory
+Options -ExecCGI
+RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phtml .phar
+
+# Prevent directory listing
+Options -Indexes
+
+# Block SVG (can contain embedded JavaScript)
+<FilesMatch "\.svg$">
+    Header set Content-Type "text/plain"
+    Header set X-Content-Type-Options "nosniff"
+</FilesMatch>
