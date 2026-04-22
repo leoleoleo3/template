@@ -1,5 +1,6 @@
 <?php
 global $title, $siteName, $siteTagline, $siteFaviconUrl, $primaryColor, $primaryColorDark, $pageTitle;
+global $sidenavColor, $topbarColor, $loginHeroEnabled, $loginHeroStart, $loginHeroEnd, $darkModeEnabled;
 
 // Build page title
 $fullTitle = isset($pageTitle) && $pageTitle ? $pageTitle . ' | ' . ($siteName ?? 'Template') : ($siteName ?? 'Template');
@@ -13,6 +14,13 @@ $_pcR = hexdec(substr($_pc, 0, 2));
 $_pcG = hexdec(substr($_pc, 2, 2));
 $_pcB = hexdec(substr($_pc, 4, 2));
 $_pcDark = $primaryColorDark ?? '#0a58ca';
+
+// Chrome + hero defaults (safe fallbacks if web_settings has not been extended yet)
+$_sidenavBg  = $sidenavColor ?: '#212529';
+$_topbarBg   = $topbarColor  ?: '#212529';
+$_heroStart  = $loginHeroStart ?: ($primaryColor ?? '#0d6efd');
+$_heroEnd    = $loginHeroEnd   ?: $_pcDark;
+$_darkDefault = !empty($darkModeEnabled) ? 'dark' : 'light';
 ?>
 <head>
     <meta charset="utf-8" />
@@ -39,6 +47,22 @@ $_pcDark = $primaryColorDark ?? '#0a58ca';
     <link href="css/styles.css" rel="stylesheet" />
     <link href="css/notification.css" rel="stylesheet" />
 
+    <!-- Template Design System (loaded AFTER styles.css to override) -->
+    <link href="css/colors_and_type.css" rel="stylesheet" />
+    <link href="css/theme-overrides.css" rel="stylesheet" />
+    <link href="css/dark-mode.css" rel="stylesheet" />
+
+    <!-- Theme bootstrap (FOUC-avoidance). Sets <html data-theme> from localStorage or tenant default. -->
+    <script nonce="<?= csp_nonce() ?>">
+        (function () {
+            try {
+                var stored = localStorage.getItem('template_theme');
+                var theme = (stored === 'dark' || stored === 'light') ? stored : '<?= $_darkDefault ?>';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { /* localStorage unavailable — stay on default */ }
+        })();
+    </script>
+
     <!-- Select2 CSS (MIT License) -->
     <link href="css/select2.min.css" rel="stylesheet" />
     <link href="css/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
@@ -56,6 +80,19 @@ $_pcDark = $primaryColorDark ?? '#0a58ca';
             --bs-primary-rgb: <?= $_pcR ?>, <?= $_pcG ?>, <?= $_pcB ?>;
             --bs-link-color: <?= htmlspecialchars($primaryColor ?? '#0d6efd') ?>;
             --bs-link-hover-color: <?= htmlspecialchars($_pcDark) ?>;
+            /* Design-system token overrides */
+            --primary:      <?= htmlspecialchars($primaryColor ?? '#0d6efd') ?>;
+            --primary-dark: <?= htmlspecialchars($_pcDark) ?>;
+            --primary-rgb:  <?= $_pcR ?>, <?= $_pcG ?>, <?= $_pcB ?>;
+            --sidenav-bg:   <?= htmlspecialchars($_sidenavBg) ?>;
+            --topbar-bg:    <?= htmlspecialchars($_topbarBg) ?>;
+            --login-hero-start: <?= htmlspecialchars($_heroStart) ?>;
+            --login-hero-end:   <?= htmlspecialchars($_heroEnd) ?>;
+        }
+        /* Dark mode still respects user-chosen chrome colors */
+        [data-theme="dark"] {
+            --sidenav-bg: <?= htmlspecialchars($_sidenavBg) ?>;
+            --topbar-bg:  <?= htmlspecialchars($_topbarBg) ?>;
         }
         /* Primary buttons */
         .btn-primary {

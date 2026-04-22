@@ -52,6 +52,30 @@ if ($isAjax) {
                 $updateData['footer_text'] = trim($_POST['footer_text']);
             }
 
+            // Appearance: chrome colors, login hero, dark mode
+            $_hexRegex = '/^#[0-9A-Fa-f]{6}$/';
+            if (isset($_POST['sidenav_color'])) {
+                $v = trim($_POST['sidenav_color']);
+                if (preg_match($_hexRegex, $v)) { $updateData['sidenav_color'] = $v; }
+            }
+            if (isset($_POST['topbar_color'])) {
+                $v = trim($_POST['topbar_color']);
+                if (preg_match($_hexRegex, $v)) { $updateData['topbar_color'] = $v; }
+            }
+            if (isset($_POST['login_hero_color_start'])) {
+                $v = trim($_POST['login_hero_color_start']);
+                if ($v === '' || preg_match($_hexRegex, $v)) { $updateData['login_hero_color_start'] = $v; }
+            }
+            if (isset($_POST['login_hero_color_end'])) {
+                $v = trim($_POST['login_hero_color_end']);
+                if ($v === '' || preg_match($_hexRegex, $v)) { $updateData['login_hero_color_end'] = $v; }
+            }
+            // Checkboxes: presence == true, absence == false. Only apply when the branding form is submitted (site_name is the canonical flag).
+            if (isset($_POST['site_name'])) {
+                $updateData['login_hero_enabled'] = !empty($_POST['login_hero_enabled']) ? '1' : '0';
+                $updateData['dark_mode_enabled']  = !empty($_POST['dark_mode_enabled'])  ? '1' : '0';
+            }
+
             $oldSettings = $settingsManager->getWebSettings();
             $result = $settingsManager->updateWebSettings($updateData);
 
@@ -324,6 +348,113 @@ ob_start();
                             </div>
                         </div>
 
+                        <!-- ─── Appearance: Chrome Colors ─── -->
+                        <hr class="my-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-swatchbook text-primary me-2"></i>
+                            <h6 class="mb-0">Chrome Colors</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sidebar Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" name="sidenav_color_picker"
+                                           id="sidenavColorPicker" value="<?= htmlspecialchars($webSettings['sidenav_color']) ?>"
+                                           <?= !$canEdit ? 'disabled' : '' ?>>
+                                    <input type="text" class="form-control" name="sidenav_color" id="sidenavColor"
+                                           value="<?= htmlspecialchars($webSettings['sidenav_color']) ?>"
+                                           pattern="^#[0-9A-Fa-f]{6}$" <?= !$canEdit ? 'disabled' : '' ?>>
+                                </div>
+                                <small class="text-muted">Background color for the left sidebar</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Topbar Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" name="topbar_color_picker"
+                                           id="topbarColorPicker" value="<?= htmlspecialchars($webSettings['topbar_color']) ?>"
+                                           <?= !$canEdit ? 'disabled' : '' ?>>
+                                    <input type="text" class="form-control" name="topbar_color" id="topbarColor"
+                                           value="<?= htmlspecialchars($webSettings['topbar_color']) ?>"
+                                           pattern="^#[0-9A-Fa-f]{6}$" <?= !$canEdit ? 'disabled' : '' ?>>
+                                </div>
+                                <small class="text-muted">Background color for the top navigation bar</small>
+                            </div>
+                        </div>
+
+                        <!-- ─── Appearance: Login Hero ─── -->
+                        <hr class="my-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-door-open text-primary me-2"></i>
+                                <h6 class="mb-0">Login Hero</h6>
+                            </div>
+                            <a href="login.php" target="_blank" rel="noopener" class="small">
+                                <i class="fas fa-external-link-alt me-1"></i> Preview login
+                            </a>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                           id="loginHeroEnabled" name="login_hero_enabled" value="1"
+                                           <?= !empty($webSettings['login_hero_enabled']) ? 'checked' : '' ?>
+                                           <?= !$canEdit ? 'disabled' : '' ?>>
+                                    <label class="form-check-label" for="loginHeroEnabled">
+                                        Show gradient hero behind the login card
+                                    </label>
+                                </div>
+                                <small class="text-muted">Turn off for a flat background on login/register pages.</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Gradient Start</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" name="login_hero_color_start_picker"
+                                           id="loginHeroStartPicker"
+                                           value="<?= htmlspecialchars($webSettings['login_hero_color_start'] ?: $webSettings['primary_color']) ?>"
+                                           <?= !$canEdit ? 'disabled' : '' ?>>
+                                    <input type="text" class="form-control" name="login_hero_color_start" id="loginHeroStart"
+                                           value="<?= htmlspecialchars($webSettings['login_hero_color_start']) ?>"
+                                           placeholder="Defaults to primary color"
+                                           pattern="^(|#[0-9A-Fa-f]{6})$" <?= !$canEdit ? 'disabled' : '' ?>>
+                                </div>
+                                <small class="text-muted">Leave blank to use the primary color.</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Gradient End</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" name="login_hero_color_end_picker"
+                                           id="loginHeroEndPicker"
+                                           value="<?= htmlspecialchars($webSettings['login_hero_color_end'] ?: '#0a58ca') ?>"
+                                           <?= !$canEdit ? 'disabled' : '' ?>>
+                                    <input type="text" class="form-control" name="login_hero_color_end" id="loginHeroEnd"
+                                           value="<?= htmlspecialchars($webSettings['login_hero_color_end']) ?>"
+                                           placeholder="Defaults to darker primary"
+                                           pattern="^(|#[0-9A-Fa-f]{6})$" <?= !$canEdit ? 'disabled' : '' ?>>
+                                </div>
+                                <small class="text-muted">Leave blank to auto-darken the primary color.</small>
+                            </div>
+                        </div>
+
+                        <!-- ─── Appearance: Dark Mode ─── -->
+                        <hr class="my-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-moon text-primary me-2"></i>
+                            <h6 class="mb-0">Dark Mode</h6>
+                        </div>
+                        <div class="form-check form-switch mb-1">
+                            <input class="form-check-input" type="checkbox" role="switch"
+                                   id="darkModeEnabled" name="dark_mode_enabled" value="1"
+                                   <?= !empty($webSettings['dark_mode_enabled']) ? 'checked' : '' ?>
+                                   <?= !$canEdit ? 'disabled' : '' ?>>
+                            <label class="form-check-label" for="darkModeEnabled">
+                                Enable dark mode by default for all users
+                            </label>
+                        </div>
+                        <small class="text-muted d-block mb-3">
+                            Sets the tenant default. Individual users can still override the theme from the topbar toggle,
+                            and their choice is remembered per device.
+                        </small>
+
                         <?php if ($canEdit): ?>
                         <div class="text-end">
                             <button type="submit" class="btn btn-primary" id="saveBrandingBtn">
@@ -558,6 +689,25 @@ document.getElementById('primaryColor').addEventListener('input', function() {
         updateColorPreview(this.value);
     }
 });
+
+// Generic sync helper for paired color-picker + text inputs (chrome + login hero)
+(function () {
+    function pair(pickerId, textId, allowEmpty) {
+        var picker = document.getElementById(pickerId);
+        var text = document.getElementById(textId);
+        if (!picker || !text) return;
+        picker.addEventListener('input', function () { text.value = this.value; });
+        text.addEventListener('input', function () {
+            var v = this.value.trim();
+            if (allowEmpty && v === '') return;
+            if (/^#[0-9A-Fa-f]{6}$/.test(v)) picker.value = v;
+        });
+    }
+    pair('sidenavColorPicker',   'sidenavColor',   false);
+    pair('topbarColorPicker',    'topbarColor',    false);
+    pair('loginHeroStartPicker', 'loginHeroStart', true);
+    pair('loginHeroEndPicker',   'loginHeroEnd',   true);
+})();
 
 function updateColorPreview(color) {
     document.getElementById('colorSwatch1').style.background = color;

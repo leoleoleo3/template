@@ -189,6 +189,12 @@ class SettingsManager
             'site_logo_dark' => $this->get('site_logo_dark', ''),
             'primary_color' => $this->get('primary_color', '#0d6efd'),
             'footer_text' => $this->get('footer_text', ''),
+            'sidenav_color' => $this->get('sidenav_color', '#212529'),
+            'topbar_color' => $this->get('topbar_color', '#212529'),
+            'login_hero_enabled' => filter_var($this->get('login_hero_enabled', '1'), FILTER_VALIDATE_BOOLEAN),
+            'login_hero_color_start' => $this->get('login_hero_color_start', ''),
+            'login_hero_color_end' => $this->get('login_hero_color_end', ''),
+            'dark_mode_enabled' => filter_var($this->get('dark_mode_enabled', '0'), FILTER_VALIDATE_BOOLEAN),
         ];
     }
 
@@ -208,14 +214,24 @@ class SettingsManager
             'site_logo_dark' => 'Dark Mode Logo',
             'primary_color' => 'Primary Color',
             'footer_text' => 'Footer Text',
+            'sidenav_color' => 'Sidebar Background',
+            'topbar_color' => 'Topbar Background',
+            'login_hero_enabled' => 'Login Hero Background',
+            'login_hero_color_start' => 'Login Gradient Start',
+            'login_hero_color_end' => 'Login Gradient End',
+            'dark_mode_enabled' => 'Dark Mode (Default)',
         ];
+
+        // Keys stored as bool — all others are string
+        $boolKeys = ['login_hero_enabled', 'dark_mode_enabled'];
 
         $updated = 0;
         $errors = [];
 
         foreach ($settings as $key => $value) {
             if (isset($webSettingsKeys[$key])) {
-                $result = $this->set($key, $value, 'string', 'web', $webSettingsKeys[$key]);
+                $type = in_array($key, $boolKeys, true) ? 'bool' : 'string';
+                $result = $this->set($key, $value, $type, 'web', $webSettingsKeys[$key]);
                 if ($result['success']) {
                     $updated++;
                 } else {
@@ -315,6 +331,12 @@ class SettingsManager
             ['site_logo_dark', '', 'string', 'web', 'Dark Mode Logo', 'Logo for dark mode (optional)'],
             ['primary_color', '#0d6efd', 'string', 'web', 'Primary Color', 'Primary brand color'],
             ['footer_text', '', 'string', 'web', 'Footer Text', 'Custom footer text'],
+            ['sidenav_color', '#212529', 'string', 'web', 'Sidebar Background', 'Hex color for the left sidenav background'],
+            ['topbar_color', '#212529', 'string', 'web', 'Topbar Background', 'Hex color for the top navigation bar'],
+            ['login_hero_enabled', '1', 'bool', 'web', 'Login Hero Background', 'Show the gradient hero on the login page'],
+            ['login_hero_color_start', '', 'string', 'web', 'Login Gradient Start', 'Login gradient start color (falls back to primary)'],
+            ['login_hero_color_end', '', 'string', 'web', 'Login Gradient End', 'Login gradient end color (falls back to darker primary)'],
+            ['dark_mode_enabled', '0', 'bool', 'web', 'Dark Mode (Default)', 'Tenant default theme; users can override per-device'],
         ];
 
         foreach ($defaults as $setting) {

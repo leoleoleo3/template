@@ -233,7 +233,13 @@ INSERT INTO `set_settings` (`setting_key`, `setting_value`, `setting_type`, `set
   ('site_favicon', '',                       'string', 'web', 'Site Favicon', 'Path to favicon (relative to public/).'),
   ('site_logo_dark', '',                     'string', 'web', 'Dark Logo',    'Alternative logo for dark backgrounds.'),
   ('primary_color','#0d6efd',               'string', 'web', 'Primary Color','Bootstrap primary accent colour (hex).'),
-  ('footer_text',  '© 2025 My Application', 'string', 'web', 'Footer Text',  'Text displayed in the page footer.');
+  ('footer_text',  '© 2025 My Application', 'string', 'web', 'Footer Text',  'Text displayed in the page footer.'),
+  ('sidenav_color',           '#212529', 'string', 'web', 'Sidebar Background',    'Hex color for the left sidenav background.'),
+  ('topbar_color',            '#212529', 'string', 'web', 'Topbar Background',     'Hex color for the top navigation bar background.'),
+  ('login_hero_enabled',      '1',       'bool',   'web', 'Login Hero Background', 'Show the gradient hero behind the login card. Disable for a flat background.'),
+  ('login_hero_color_start',  '',        'string', 'web', 'Login Gradient Start',  'Optional override for the login gradient start color. Falls back to the primary color.'),
+  ('login_hero_color_end',    '',        'string', 'web', 'Login Gradient End',    'Optional override for the login gradient end color. Falls back to a darker primary color.'),
+  ('dark_mode_enabled',       '0',       'bool',   'web', 'Dark Mode (Default)',   'Tenant default theme. Users can override per-device via the topbar toggle.');
 
 -- =============================================================================
 --  AUDIT TRAIL  (immutable INSERT-only log)

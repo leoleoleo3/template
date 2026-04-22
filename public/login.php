@@ -39,23 +39,28 @@ if (isset($_SESSION['login_email'])) {
     unset($_SESSION['login_email']);
 }
 
-// Check for session expiration message
 if (isset($_GET['expired'])) {
     $errors[] = 'Your session has expired. Please login again.';
 }
 
 $currentYear = date('Y');
 $displaySiteName = htmlspecialchars($siteName ?? 'Template');
-$displayTagline = htmlspecialchars($siteTagline ?? 'Student & Admin Portal');
+$displayTagline = htmlspecialchars($siteTagline ?? 'Portal');
 $color = htmlspecialchars($primaryColor ?? '#0d6efd');
 $colorDark = htmlspecialchars($primaryColorDark ?? '#0a58ca');
 $displayFooter = !empty($footerText) ? htmlspecialchars($footerText) : '&copy; ' . $currentYear . ' ' . $displaySiteName;
 
-// Convert primary color hex to RGB for dynamic rgba() usage
+// Primary-color RGB for rgba()
 $hexClean = ltrim($color, '#');
 $colorR = hexdec(substr($hexClean, 0, 2));
 $colorG = hexdec(substr($hexClean, 2, 2));
 $colorB = hexdec(substr($hexClean, 4, 2));
+
+// Hero gradient: user overrides > primary fallback
+$_heroStart = !empty($loginHeroStart) ? $loginHeroStart : ($primaryColor ?? '#0d6efd');
+$_heroEnd   = !empty($loginHeroEnd)   ? $loginHeroEnd   : ($primaryColorDark ?? '#0a58ca');
+$_heroEnabled = !isset($loginHeroEnabled) ? true : (bool)$loginHeroEnabled;
+$_darkDefault = !empty($darkModeEnabled) ? 'dark' : 'light';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,74 +79,55 @@ $colorB = hexdec(substr($hexClean, 4, 2));
     <?php endif; ?>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/colors_and_type.css" rel="stylesheet">
+    <link href="css/theme-overrides.css" rel="stylesheet">
+
     <script nonce="<?= csp_nonce() ?>" src="js/all.js" crossorigin="anonymous"></script>
 
     <style nonce="<?= csp_nonce() ?>">
-        *, *::before, *::after { box-sizing: border-box; }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: <?= $color ?>;
+        :root {
+            --primary:      <?= $color ?>;
+            --primary-dark: <?= $colorDark ?>;
+            --primary-rgb:  <?= $colorR ?>, <?= $colorG ?>, <?= $colorB ?>;
+            --login-hero-start: <?= htmlspecialchars($_heroStart) ?>;
+            --login-hero-end:   <?= htmlspecialchars($_heroEnd) ?>;
+            --bs-primary: <?= $color ?>;
+            --bs-primary-rgb: <?= $colorR ?>, <?= $colorG ?>, <?= $colorB ?>;
+        }
+        .btn-primary {
+            --bs-btn-bg: <?= $color ?>;
+            --bs-btn-border-color: <?= $color ?>;
+            --bs-btn-hover-bg: <?= $colorDark ?>;
+            --bs-btn-hover-border-color: <?= $colorDark ?>;
+            --bs-btn-active-bg: <?= $colorDark ?>;
+        }
+        .alert { font-size: 0.85rem; border-radius: 8px; margin-bottom: 14px; }
+        .btn-login {
             background: linear-gradient(135deg, <?= $color ?> 0%, <?= $colorDark ?> 100%);
+            border: 0;
+            color: #fff;
+        }
+        .btn-login:hover { opacity: 0.92; color: #fff; }
+        .password-wrapper { position: relative; }
+        .password-toggle {
+            position: absolute; right: 12px; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: 0;
+            color: var(--fg-subtle); cursor: pointer;
+            padding: 0; font-size: 1rem;
+        }
+        .password-toggle:hover { color: var(--fg-muted); }
+
+        /* Login variant: logo medallion sits on the very top-center of the card.
+           Matches Ashe/public/login.php: logo is a direct child of the card,
+           positioned absolute at top: -55px so it straddles the card's top edge. */
+        .auth-card .auth-card-bar { display: none; }
+        .auth-card {
             position: relative;
-            overflow: hidden;
+            overflow: visible !important;
         }
-
-        /* Diagonal stripe pattern overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 35px,
-                rgba(255, 255, 255, 0.03) 35px,
-                rgba(255, 255, 255, 0.03) 70px
-            );
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Subtle wave shapes */
-        /* body::after {
-            content: '';
-            position: fixed;
-            bottom: -20%;
-            right: -10%;
-            width: 60%;
-            height: 60%;
-            background: radial-gradient(ellipse, rgba(255,255,255,0.05) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        } */
-
-        .login-wrapper {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 420px;
-            padding: 60px 20px 20px;
-        }
-
-        .login-card {
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            padding: 70px 36px 36px;
-            position: relative;
-        }
-
-        /* Logo circle */
-        .logo-wrapper {
+        .auth-card .auth-card-body { padding-top: 0; }
+        .auth-card > .auth-logo {
             position: absolute;
             top: -55px;
             left: 50%;
@@ -150,182 +136,35 @@ $colorB = hexdec(substr($hexClean, 4, 2));
             height: 110px;
             border-radius: 50%;
             overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
             background: #fff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 2;
         }
-
-        .logo-wrapper img {
+        .auth-card > .auth-logo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
-        .logo-wrapper .logo-placeholder {
-            width: 100%;
-            height: 100%;
-            background: <?= $color ?>;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .school-name {
-            text-align: center;
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #1a1a2e;
-            margin: 0 0 2px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .school-tagline {
-            text-align: center;
-            font-size: 0.85rem;
-            color: #666;
-            margin: 0 0 14px;
-        }
-
-        .divider {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, <?= $color ?>, transparent);
-            margin: 0 auto 18px;
-            width: 70%;
-            border: none;
-        }
-
-        .cert-text {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #777;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            padding: 0 10px;
-        }
-
-        .field-label {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #444;
-            margin-bottom: 6px;
-        }
-
-        .form-control.login-input {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 11px 14px;
-            font-size: 0.9rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background: #fafafa;
-        }
-
-        .form-control.login-input:focus {
-            border-color: <?= $color ?>;
-            box-shadow: 0 0 0 3px rgba(<?= $colorR ?>, <?= $colorG ?>, <?= $colorB ?>, 0.1);
-            background: #fff;
-        }
-
-        .form-control.login-input.is-invalid {
-            border-color: #dc3545;
-        }
-
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #aaa;
-            cursor: pointer;
-            padding: 0;
-            font-size: 1rem;
-        }
-
-        .password-toggle:hover {
-            color: #555;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, <?= $color ?> 0%, <?= $colorDark ?> 100%);
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-
-        .btn-login:hover {
-            opacity: 0.92;
-        }
-
-        .btn-login:active {
-            transform: scale(0.99);
-        }
-
-        .login-footer {
-            text-align: center;
-            font-size: 0.78rem;
-            color: #999;
-            margin-top: 22px;
-            padding-bottom: 4px;
-        }
-
-        .alert {
-            font-size: 0.82rem;
-            border-radius: 8px;
-            margin-bottom: 14px;
-        }
-
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 60px 24px 28px;
-                border-radius: 16px;
-            }
-            .login-wrapper {
-                padding: 50px 12px 12px;
-            }
-        }
     </style>
 </head>
-<body>
+<body class="template auth-page<?= $_heroEnabled ? '' : ' hero-off' ?>">
 
-<div class="login-wrapper">
-    <div class="login-card">
-        <!-- Logo -->
-        <div class="logo-wrapper">
-            <?php if (!empty($siteLogoUrl)): ?>
-                <img src="<?= htmlspecialchars($siteLogoUrl) ?>" alt="<?= $displaySiteName ?>">
-            <?php else: ?>
-                <div class="logo-placeholder">
-                    <?= mb_substr($siteName ?? 'A', 0, 1) ?>
-                </div>
-            <?php endif; ?>
-        </div>
+<div class="auth-card">
+    <div class="auth-logo">
+        <?php if (!empty($siteLogoUrl)): ?>
+            <img src="<?= htmlspecialchars($siteLogoUrl) ?>" alt="<?= $displaySiteName ?>">
+        <?php else: ?>
+            <span class="auth-logo-fallback"><?= htmlspecialchars(mb_substr($siteName ?? 'A', 0, 1)) ?></span>
+        <?php endif; ?>
+    </div>
+    <div class="auth-card-bar"></div>
+    <div class="auth-card-body">
+        <h1 class="auth-brand"><?= $displaySiteName ?></h1>
+        <p class="auth-brand-tag"><?= $displayTagline ?></p>
 
-        <!-- School Name & Tagline -->
-        <h1 class="school-name"><?= $displaySiteName ?></h1>
-        <p class="school-tagline"><?= $displayTagline ?></p>
-
-        <hr class="divider">
-
-        <!-- Alerts -->
         <?php if (!empty($success)): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="fas fa-check-circle me-1"></i>
@@ -342,43 +181,58 @@ $colorB = hexdec(substr($hexClean, 4, 2));
             </div>
         <?php endforeach; ?>
 
-        <!-- Login Form -->
         <form method="POST" action="login_process.php">
             <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($session->getCSRFToken()) ?>">
 
             <div class="mb-3">
-                <input
-                    class="form-control login-input<?= !empty($errors) ? ' is-invalid' : '' ?>"
-                    id="inputEmail"
-                    type="email"
-                    name="email"
-                    placeholder="Username / Email"
-                    value="<?= htmlspecialchars($email_value) ?>"
-                    required
-                    autofocus
-                >
+                <label class="form-label" for="inputEmail">Email</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input
+                        class="form-control<?= !empty($errors) ? ' is-invalid' : '' ?>"
+                        id="inputEmail"
+                        type="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        value="<?= htmlspecialchars($email_value) ?>"
+                        required
+                        autofocus>
+                </div>
             </div>
 
-            <div class="mb-1">
-                <div class="password-wrapper">
+            <div class="mb-3">
+                <label class="form-label" for="inputPassword">Password</label>
+                <div class="input-group password-wrapper">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
                     <input
-                        class="form-control login-input<?= !empty($errors) ? ' is-invalid' : '' ?>"
+                        class="form-control<?= !empty($errors) ? ' is-invalid' : '' ?>"
                         id="inputPassword"
                         type="password"
                         name="password"
-                        placeholder="Password"
-                        required
-                    >
-                    <button type="button" class="password-toggle" data-action="togglePassword" tabindex="-1">
-                        <i class="fas fa-lock" id="toggleIcon"></i>
+                        placeholder="Enter your password"
+                        required>
+                    <button type="button" class="password-toggle" data-action="togglePassword" tabindex="-1" aria-label="Show password">
+                        <i class="fas fa-eye" id="toggleIcon"></i>
                     </button>
                 </div>
             </div>
 
-            <button type="submit" class="btn-login">LOGIN</button>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember">
+                    <label class="form-check-label small text-muted" for="rememberMe">Remember me</label>
+                </div>
+                <a href="forgot_password.php" class="small">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-login w-100">Sign In</button>
         </form>
 
-        <div class="login-footer">
+        <div class="auth-footer-links">
+            New user? <a href="register.php">Create an account</a>
+        </div>
+
+        <div class="text-center text-muted small mt-3">
             <?= $displayFooter ?>
         </div>
     </div>
@@ -391,10 +245,10 @@ function togglePassword() {
     const icon = document.getElementById('toggleIcon');
     if (input.type === 'password') {
         input.type = 'text';
-        icon.className = 'fas fa-lock-open';
+        icon.className = 'fas fa-eye-slash';
     } else {
         input.type = 'password';
-        icon.className = 'fas fa-lock';
+        icon.className = 'fas fa-eye';
     }
 }
 document.addEventListener('click', function(e) {

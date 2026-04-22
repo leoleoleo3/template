@@ -1,0 +1,472 @@
+/* ============================================================
+   TEMPLATE DESIGN SYSTEM — Theme Overrides
+   ------------------------------------------------------------
+   Layers on top of SB Admin (styles.css) to map its selectors
+   onto the design system tokens. Loaded AFTER styles.css and
+   colors_and_type.css.
+
+   Specificity strategy: body.template <selector> wins over
+   SB Admin's single-selector rules. Use !important only for
+   chrome backgrounds and the 3px primary active bar.
+   ============================================================ */
+
+/* ---------- Layout shell ---------- */
+
+body.template #layoutSidenav {
+  display: flex;
+}
+
+body.template #layoutSidenav_content {
+  min-height: calc(100vh - var(--topbar-h));
+  background: var(--bg);
+}
+
+body.template main {
+  padding-top: var(--space-3);
+}
+
+body.template .container-fluid {
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* ---------- Topbar ---------- */
+
+body.template .sb-topnav {
+  min-height: var(--topbar-h);
+  background: var(--topbar-bg) !important;
+  color: var(--topbar-fg);
+}
+
+body.template .sb-topnav.bg-dark {
+  background: var(--topbar-bg) !important;
+}
+
+body.template .sb-topnav .navbar-brand {
+  width: var(--sidenav-w);
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+  font-weight: var(--weight-black);
+  letter-spacing: .08em;
+}
+
+body.template #sidebarToggle {
+  color: var(--topbar-fg);
+}
+
+body.template .sb-topnav .btn-theme-toggle {
+  background: transparent;
+  border: 0;
+  color: var(--topbar-fg);
+  opacity: .8;
+  transition: opacity .15s ease;
+}
+body.template .sb-topnav .btn-theme-toggle:hover,
+body.template .sb-topnav .btn-theme-toggle:focus {
+  opacity: 1;
+  color: var(--topbar-fg);
+}
+
+/* ---------- Sidenav ---------- */
+
+body.template .sb-sidenav {
+  background: var(--sidenav-bg) !important;
+  color: var(--sidenav-fg);
+  width: var(--sidenav-w);
+}
+
+body.template .sb-sidenav-dark {
+  background: var(--sidenav-bg) !important;
+  color: var(--sidenav-fg);
+}
+
+body.template .sb-sidenav-dark .sb-sidenav-menu-heading {
+  color: var(--gray-600);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  padding: 1rem 1.25rem .35rem;
+}
+
+body.template .sb-sidenav-dark .nav-link {
+  color: var(--sidenav-fg);
+  padding: .65rem 1.25rem;
+  font-size: .9rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  position: relative;
+  transition: color .12s ease, background .12s ease;
+}
+
+body.template .sb-sidenav-dark .nav-link .sb-nav-link-icon {
+  width: 16px;
+  text-align: center;
+  color: inherit;
+  opacity: .75;
+}
+
+body.template .sb-sidenav-dark .nav-link:hover,
+body.template .sb-sidenav-dark .nav-link:focus {
+  color: var(--sidenav-fg-active);
+  background: rgba(255, 255, 255, .04);
+}
+
+body.template .sb-sidenav-dark .nav-link.active {
+  color: var(--sidenav-fg-active);
+  background: rgba(255, 255, 255, .05);
+}
+
+body.template .sb-sidenav-dark .nav-link.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--primary) !important;
+}
+
+body.template .sb-sidenav-dark .nav-link.active .sb-nav-link-icon {
+  opacity: 1;
+  color: var(--primary);
+}
+
+body.template .sb-sidenav-dark .sb-sidenav-collapse-arrow {
+  opacity: .6;
+}
+
+body.template .sb-sidenav-footer {
+  background: rgba(0, 0, 0, .25);
+  color: var(--sidenav-fg);
+  padding: .75rem 1.25rem;
+  font-size: .8rem;
+}
+
+/* ---------- Cards ---------- */
+
+body.template .card {
+  border: 0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  background: var(--surface);
+}
+
+body.template .card-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-weight: var(--weight-semibold);
+}
+
+body.template .card.text-white .card-header,
+body.template .card[class*="bg-"] .card-header {
+  border-bottom-color: rgba(255, 255, 255, .2);
+}
+
+body.template .card-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+body.template .card[class*="bg-"] .card-footer {
+  border-top-color: rgba(255, 255, 255, .2);
+}
+
+body.template .card-flush .card-body,
+body.template .card .card-body.p-0 { padding: 0; }
+
+/* ---------- Tables ---------- */
+
+body.template .table {
+  color: var(--fg);
+  margin-bottom: 0;
+}
+
+body.template .table > :not(caption) > * > * {
+  padding: .75rem 1rem;
+}
+
+body.template .table thead th {
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+body.template .table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: var(--surface-alt);
+  color: var(--fg);
+}
+
+body.template .table-hover > tbody > tr:hover > * {
+  background-color: rgba(var(--primary-rgb), .06);
+}
+
+/* ---------- Forms ---------- */
+
+body.template .form-label {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  color: var(--fg);
+  margin-bottom: .35rem;
+}
+
+body.template .form-control,
+body.template .form-select {
+  border-color: var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  background-color: var(--surface);
+}
+
+body.template .form-control:focus,
+body.template .form-select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 .2rem rgba(var(--primary-rgb), .20);
+}
+
+body.template .input-group-text {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--fg-muted);
+}
+
+/* ---------- Breadcrumbs ---------- */
+
+body.template .breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin-bottom: var(--space-4);
+  font-size: var(--text-sm);
+}
+
+body.template .breadcrumb-item + .breadcrumb-item::before {
+  color: var(--fg-subtle);
+}
+
+body.template .breadcrumb-item.active {
+  color: var(--fg-muted);
+}
+
+/* ---------- Page heading ---------- */
+
+body.template main > .container-fluid > h1,
+body.template main > .container-fluid > h1.mt-4 {
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-medium);
+  color: var(--fg);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+/* ---------- Modals ---------- */
+
+body.template .modal-content {
+  border: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  background: var(--surface);
+  color: var(--fg);
+}
+
+body.template .modal-header {
+  border-bottom: 1px solid var(--border);
+}
+
+body.template .modal-footer {
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Dropdowns ---------- */
+
+body.template .dropdown-menu {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: var(--surface);
+  color: var(--fg);
+}
+
+body.template .dropdown-item {
+  color: var(--fg);
+}
+
+body.template .dropdown-item:hover,
+body.template .dropdown-item:focus {
+  background: var(--surface-alt);
+  color: var(--fg);
+}
+
+body.template .dropdown-divider {
+  border-top-color: var(--border);
+}
+
+/* ---------- Buttons ---------- */
+
+body.template .btn {
+  border-radius: var(--radius-sm);
+  font-weight: var(--weight-medium);
+}
+
+body.template .btn i,
+body.template .btn svg { margin-right: .25rem; }
+body.template .btn i:last-child,
+body.template .btn svg:last-child { margin-right: 0; }
+
+/* ---------- Badges ---------- */
+
+body.template .badge {
+  font-weight: var(--weight-semibold);
+  letter-spacing: .02em;
+}
+
+/* ---------- Alerts ---------- */
+
+body.template .alert {
+  border: 0;
+  border-radius: var(--radius);
+}
+
+/* ---------- Auth page shell (used by login/register/forgot) ---------- */
+
+body.template.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: linear-gradient(135deg, var(--login-hero-start), var(--login-hero-end));
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Suppress the legacy full-width footer on standalone auth pages */
+body.template.auth-page #layoutAuthentication_footer { display: none; }
+body.template.auth-page #layoutAuthentication,
+body.template.auth-page #layoutAuthentication_content {
+  display: contents;
+}
+body.template.auth-page main {
+  display: contents;
+}
+
+body.template.auth-page.hero-off {
+  background: var(--bg);
+}
+
+body.template.auth-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--login-stripe) 0 2px,
+    transparent 2px 24px
+  );
+  pointer-events: none;
+}
+
+body.template.auth-page.hero-off::before { display: none; }
+
+body.template .auth-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, .25);
+  overflow: hidden;
+}
+
+body.template .auth-card-bar {
+  height: 48px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+}
+
+body.template .auth-card-body {
+  padding: 2.5rem;
+  padding-top: 1rem;
+}
+
+body.template .auth-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 4px solid var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+  position: relative;
+  overflow: hidden;
+}
+
+body.template .auth-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body.template .auth-logo .auth-logo-fallback {
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+body.template .auth-brand {
+  text-align: center;
+  font-size: var(--text-xl);
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--fg);
+  margin-bottom: .25rem;
+}
+
+body.template .auth-brand-tag {
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: .85rem;
+  margin-bottom: 1.5rem;
+}
+
+body.template .auth-card .form-label {
+  font-size: .8rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+body.template .auth-card .btn-primary {
+  padding: .6rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+body.template .auth-footer-links {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: .85rem;
+  color: var(--fg-muted);
+}
+
+/* ---------- Loading overlay ---------- */
+
+body.template #loadingOverlay {
+  background: rgba(var(--primary-rgb), .08);
+}
+
+/* ---------- Stat card refinements ---------- */
+
+body.template .card[class*="bg-"].text-white .card-body .small {
+  opacity: .85;
+  font-weight: var(--weight-semibold);
+  letter-spacing: .05em;
+}

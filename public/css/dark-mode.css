@@ -1,0 +1,325 @@
+/* ============================================================
+   TEMPLATE DESIGN SYSTEM — Dark Mode
+   ------------------------------------------------------------
+   All rules scoped under [data-theme="dark"] on <body>.
+   Loaded AFTER theme-overrides.css.
+
+   User-chosen chrome colors (sidenav_color, topbar_color)
+   survive dark mode — they are not re-overridden here.
+   ============================================================ */
+
+[data-theme="dark"] {
+  --bg:          #0d1117;
+  --surface:     #161b22;
+  --surface-alt: #1c2128;
+  --fg:          #e6edf3;
+  --fg-muted:    #9ba3af;
+  --fg-subtle:   #6e7781;
+  --border:      #30363d;
+  --shadow-card: 0 .15rem 1.75rem 0 rgba(0, 0, 0, .5);
+  --shadow:      0 .5rem 1rem rgba(0, 0, 0, .45);
+  --shadow-lg:   0 1rem 3rem rgba(0, 0, 0, .6);
+}
+
+/* ---------- Body & main surfaces ---------- */
+
+body.template[data-theme="dark"] {
+  color: var(--fg);
+  background: var(--bg);
+}
+
+body.template[data-theme="dark"] #layoutSidenav_content {
+  background: var(--bg);
+}
+
+/* ---------- Cards ---------- */
+
+body.template[data-theme="dark"] .card {
+  background: var(--surface);
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .card-header,
+body.template[data-theme="dark"] .card-footer {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--fg);
+}
+
+/* Keep semantic stat cards (bg-primary, bg-success, etc.) vivid — no override */
+
+/* ---------- Tables ---------- */
+
+body.template[data-theme="dark"] .table {
+  color: var(--fg);
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--fg);
+  --bs-table-striped-bg: var(--surface-alt);
+  --bs-table-striped-color: var(--fg);
+  --bs-table-hover-bg: rgba(var(--primary-rgb), .12);
+  --bs-table-hover-color: var(--fg);
+  --bs-table-border-color: var(--border);
+}
+
+body.template[data-theme="dark"] .table thead th {
+  background: var(--surface-alt);
+  color: var(--fg-muted);
+  border-bottom-color: var(--border);
+}
+
+body.template[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: var(--surface-alt);
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .table-hover > tbody > tr:hover > * {
+  background-color: rgba(var(--primary-rgb), .15);
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .table > :not(caption) > * > * {
+  border-bottom-color: var(--border);
+}
+
+/* ---------- Forms ---------- */
+
+body.template[data-theme="dark"] .form-control,
+body.template[data-theme="dark"] .form-select {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .form-control::placeholder {
+  color: var(--fg-subtle);
+}
+
+body.template[data-theme="dark"] .form-control:focus,
+body.template[data-theme="dark"] .form-select:focus {
+  background: var(--surface-alt);
+  color: var(--fg);
+  border-color: var(--border-focus);
+}
+
+body.template[data-theme="dark"] .form-label {
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .input-group-text {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--fg-muted);
+}
+
+body.template[data-theme="dark"] .form-check-input {
+  background-color: var(--surface-alt);
+  border-color: var(--border);
+}
+
+body.template[data-theme="dark"] .form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* ---------- Modals ---------- */
+
+body.template[data-theme="dark"] .modal-content {
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+
+body.template[data-theme="dark"] .modal-header,
+body.template[data-theme="dark"] .modal-footer {
+  border-color: var(--border);
+}
+
+body.template[data-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(1) brightness(1.8);
+}
+
+/* ---------- Dropdowns ---------- */
+
+body.template[data-theme="dark"] .dropdown-menu {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .dropdown-item {
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .dropdown-item:hover,
+body.template[data-theme="dark"] .dropdown-item:focus {
+  background: var(--surface-alt);
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .dropdown-header {
+  color: var(--fg-muted);
+}
+
+body.template[data-theme="dark"] .dropdown-divider {
+  border-top-color: var(--border);
+}
+
+/* ---------- Breadcrumbs & nav ---------- */
+
+body.template[data-theme="dark"] .breadcrumb-item + .breadcrumb-item::before {
+  color: var(--fg-subtle);
+}
+
+body.template[data-theme="dark"] .breadcrumb-item a {
+  color: var(--primary);
+}
+
+body.template[data-theme="dark"] .breadcrumb-item.active {
+  color: var(--fg-muted);
+}
+
+body.template[data-theme="dark"] .nav-tabs {
+  border-bottom-color: var(--border);
+}
+
+body.template[data-theme="dark"] .nav-tabs .nav-link {
+  color: var(--fg-muted);
+}
+
+body.template[data-theme="dark"] .nav-tabs .nav-link.active {
+  background: var(--surface);
+  border-color: var(--border) var(--border) var(--surface);
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"] .page-link {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--primary);
+}
+
+body.template[data-theme="dark"] .page-item.disabled .page-link {
+  background: var(--surface-alt);
+  color: var(--fg-subtle);
+}
+
+/* ---------- Alerts ---------- */
+
+body.template[data-theme="dark"] .alert {
+  background: var(--surface-alt);
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+
+body.template[data-theme="dark"] .alert-success { border-left: 3px solid var(--success); }
+body.template[data-theme="dark"] .alert-danger  { border-left: 3px solid var(--danger); }
+body.template[data-theme="dark"] .alert-warning { border-left: 3px solid var(--warning); }
+body.template[data-theme="dark"] .alert-info    { border-left: 3px solid var(--info); }
+
+/* ---------- Text helpers ---------- */
+
+body.template[data-theme="dark"] .text-muted { color: var(--fg-muted) !important; }
+body.template[data-theme="dark"] .text-dark  { color: var(--fg) !important; }
+body.template[data-theme="dark"] .bg-white   { background-color: var(--surface) !important; color: var(--fg); }
+body.template[data-theme="dark"] .bg-light   { background-color: var(--surface-alt) !important; color: var(--fg); }
+body.template[data-theme="dark"] hr          { border-color: var(--border); }
+
+body.template[data-theme="dark"] a { color: var(--primary-600); }
+body.template[data-theme="dark"] a:hover { color: var(--primary); }
+
+/* ---------- Select2 (portal — rendered outside normal DOM) ---------- */
+
+[data-theme="dark"] .select2-container--bootstrap-5 .select2-selection,
+[data-theme="dark"] .select2-dropdown {
+  background: var(--surface-alt);
+  border-color: var(--border);
+  color: var(--fg);
+}
+
+[data-theme="dark"] .select2-container--bootstrap-5 .select2-selection__rendered,
+[data-theme="dark"] .select2-container--bootstrap-5 .select2-selection__placeholder {
+  color: var(--fg);
+}
+
+[data-theme="dark"] .select2-results__option {
+  color: var(--fg);
+}
+
+[data-theme="dark"] .select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected] {
+  background: var(--primary);
+  color: #fff;
+}
+
+[data-theme="dark"] .select2-search__field {
+  background: var(--surface-alt) !important;
+  color: var(--fg) !important;
+  border-color: var(--border) !important;
+}
+
+/* ---------- SweetAlert2 (portal) ---------- */
+
+[data-theme="dark"] .swal2-popup {
+  background: var(--surface);
+  color: var(--fg);
+}
+
+[data-theme="dark"] .swal2-title,
+[data-theme="dark"] .swal2-html-container {
+  color: var(--fg);
+}
+
+[data-theme="dark"] .swal2-input,
+[data-theme="dark"] .swal2-textarea,
+[data-theme="dark"] .swal2-select {
+  background: var(--surface-alt);
+  color: var(--fg);
+  border-color: var(--border);
+}
+
+/* ---------- Bootstrap Datepicker (portal) ---------- */
+
+[data-theme="dark"] .datepicker,
+[data-theme="dark"] .datepicker-dropdown {
+  background: var(--surface);
+  color: var(--fg);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .datepicker table tr td,
+[data-theme="dark"] .datepicker table tr th {
+  color: var(--fg);
+}
+
+[data-theme="dark"] .datepicker table tr td.day:hover,
+[data-theme="dark"] .datepicker table tr td.focused {
+  background: var(--surface-alt);
+}
+
+[data-theme="dark"] .datepicker table tr td.active,
+[data-theme="dark"] .datepicker table tr td.active:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+[data-theme="dark"] .datepicker table tr td.old,
+[data-theme="dark"] .datepicker table tr td.new {
+  color: var(--fg-subtle);
+}
+
+/* ---------- Auth pages in dark mode ---------- */
+
+body.template[data-theme="dark"].auth-page .auth-card {
+  background: var(--surface);
+  color: var(--fg);
+}
+
+body.template[data-theme="dark"].auth-page .auth-logo {
+  background: var(--surface);
+  border-color: var(--surface);
+}
+
+/* ---------- Loading overlay ---------- */
+
+body.template[data-theme="dark"] #loadingOverlay {
+  background: rgba(0, 0, 0, .5);
+}

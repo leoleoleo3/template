@@ -51,6 +51,14 @@ $siteFavicon = $webSettings['site_favicon'] ?? '';
 $primaryColor = $webSettings['primary_color'] ?? '#0d6efd';
 $footerText = $webSettings['footer_text'] ?? '';
 
+// Appearance: chrome colors, login hero, dark mode default
+$sidenavColor      = $webSettings['sidenav_color']          ?? '#212529';
+$topbarColor       = $webSettings['topbar_color']           ?? '#212529';
+$loginHeroEnabled  = $webSettings['login_hero_enabled']     ?? true;
+$loginHeroStart    = $webSettings['login_hero_color_start'] ?? '';
+$loginHeroEnd      = $webSettings['login_hero_color_end']   ?? '';
+$darkModeEnabled   = $webSettings['dark_mode_enabled']      ?? false;
+
 // Build full URLs for assets
 $siteLogoUrl = $siteLogo ? '/uploads/' . $siteLogo : '';
 $siteLogoDarkUrl = $siteLogoDark ? '/uploads/' . $siteLogoDark : '';

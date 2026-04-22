@@ -9,6 +9,9 @@ global $siteName, $footerText;
 $currentYear = date('Y');
 $displayFooterText = !empty($footerText) ? $footerText : 'Copyright &copy; ' . htmlspecialchars($siteName ?? 'Template') . ' ' . $currentYear;
 ?>
+            <?php // Inside the main layout.php (authenticated pages) this footer is useful.
+                  // On standalone auth pages (login/register/forgot) the body is a flex-centered
+                  // gradient, so the legacy footer is suppressed by CSS (.template.auth-page #layoutAuthentication_footer). ?>
             <div id="layoutAuthentication_footer">
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">

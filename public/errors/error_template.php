@@ -35,6 +35,13 @@ $baseUrl = $_SERVER['SERVER_HOST'] ?? '';
 
 // Clean up the base URL
 $baseUrl = rtrim($baseUrl, '/');
+
+// Primary color + hero gradient (fall back to design defaults when DB unavailable)
+$_ep_primary      = $primaryColor      ?? '#0d6efd';
+$_ep_primary_dark = $primaryColorDark  ?? '#0a58ca';
+$_ep_hero_start   = !empty($loginHeroStart) ? $loginHeroStart : $_ep_primary;
+$_ep_hero_end     = !empty($loginHeroEnd)   ? $loginHeroEnd   : $_ep_primary_dark;
+$_ep_dark_default = !empty($darkModeEnabled) ? 'dark' : 'light';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,88 +55,89 @@ $baseUrl = rtrim($baseUrl, '/');
     <?php endif; ?>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/all.min.css" rel="stylesheet">
+    <link href="css/colors_and_type.css" rel="stylesheet">
+    <link href="css/theme-overrides.css" rel="stylesheet">
+
     <style nonce="<?= csp_nonce() ?>">
         :root {
-            --primary-color: #4e73df;
-            --secondary-color: #858796;
-            --success-color: #1cc88a;
-            --danger-color: #e74a3b;
-            --warning-color: #f6c23e;
-            --info-color: #36b9cc;
-            --dark-color: #5a5c69;
+            --primary:          <?= htmlspecialchars($_ep_primary) ?>;
+            --primary-dark:     <?= htmlspecialchars($_ep_primary_dark) ?>;
+            --login-hero-start: <?= htmlspecialchars($_ep_hero_start) ?>;
+            --login-hero-end:   <?= htmlspecialchars($_ep_hero_end) ?>;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        body.error-body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            background: linear-gradient(135deg, var(--login-hero-start), var(--login-hero-end));
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body.error-body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(45deg,
+                rgba(255,255,255,0.04) 0 2px, transparent 2px 24px);
+            pointer-events: none;
         }
 
         .error-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.25);
             max-width: 500px;
             width: 100%;
             text-align: center;
             padding: 50px 40px;
-            animation: fadeInUp 0.6s ease-out;
+            animation: fadeInUp 0.5s ease-out;
+            color: var(--fg);
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .error-icon {
-            width: 120px;
-            height: 120px;
+            width: 112px;
+            height: 112px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            font-size: 50px;
-            animation: pulse 2s infinite;
+            margin: 0 auto 28px;
+            font-size: 44px;
+            color: #fff;
+            animation: pulse 2.4s infinite;
         }
 
-        .error-icon.error-401 { background: linear-gradient(135deg, #f6c23e, #f4b619); color: white; }
-        .error-icon.error-403 { background: linear-gradient(135deg, #e74a3b, #c0392b); color: white; }
-        .error-icon.error-404 { background: linear-gradient(135deg, #4e73df, #224abe); color: white; }
-        .error-icon.error-500 { background: linear-gradient(135deg, #e74a3b, #c0392b); color: white; }
-        .error-icon.error-503 { background: linear-gradient(135deg, #f6c23e, #f4b619); color: white; }
-        .error-icon.error-maintenance { background: linear-gradient(135deg, #36b9cc, #1a8a9a); color: white; }
-        .error-icon.error-offline { background: linear-gradient(135deg, #858796, #5a5c69); color: white; }
-        .error-icon.error-session { background: linear-gradient(135deg, #f6c23e, #f4b619); color: white; }
+        .error-icon.error-401,
+        .error-icon.error-503,
+        .error-icon.error-session       { background: var(--warning); color: #212529; }
+        .error-icon.error-403,
+        .error-icon.error-500           { background: var(--danger); }
+        .error-icon.error-404           { background: var(--primary); }
+        .error-icon.error-maintenance   { background: var(--info); }
+        .error-icon.error-offline       { background: var(--secondary); }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.04); }
         }
 
         .error-code {
             font-size: 72px;
             font-weight: 800;
-            color: var(--dark-color);
             line-height: 1;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -138,169 +146,94 @@ $baseUrl = rtrim($baseUrl, '/');
         .error-title {
             font-size: 28px;
             font-weight: 700;
-            color: var(--dark-color);
+            color: var(--fg);
             margin-bottom: 15px;
         }
 
         .error-message {
             font-size: 16px;
-            color: var(--secondary-color);
+            color: var(--fg-muted);
             line-height: 1.6;
             margin-bottom: 30px;
         }
 
         .error-actions {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .btn-custom {
-            padding: 12px 30px;
-            border-radius: 50px;
+            padding: 10px 24px;
+            border-radius: var(--radius-pill);
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
         }
 
         .btn-primary-custom {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: 0;
         }
 
         .btn-primary-custom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-            color: white;
+            box-shadow: var(--shadow);
+            color: #fff;
         }
 
         .btn-outline-custom {
             background: transparent;
-            color: var(--dark-color);
-            border: 2px solid #e3e6f0;
+            color: var(--fg);
+            border: 2px solid var(--border);
         }
 
         .btn-outline-custom:hover {
-            background: #f8f9fc;
-            border-color: #d1d3e2;
-            color: var(--dark-color);
+            background: var(--surface-alt);
+            border-color: var(--gray-400);
+            color: var(--fg);
         }
 
         .error-details {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #e3e6f0;
+            border-top: 1px solid var(--border);
         }
 
         .error-details p {
             font-size: 13px;
-            color: var(--secondary-color);
+            color: var(--fg-muted);
             margin: 0;
         }
 
         .error-details code {
-            background: #f8f9fc;
+            background: var(--surface-alt);
             padding: 2px 8px;
-            border-radius: 4px;
+            border-radius: var(--radius-sm);
             font-size: 12px;
+            color: var(--fg);
         }
 
-        /* Maintenance specific */
-        .maintenance-progress {
-            margin: 20px 0;
-        }
+        .maintenance-progress { margin: 20px 0; }
+        .progress-bar-animated { animation: progress-bar-stripes 1s linear infinite; }
+        .retry-countdown { font-size: 14px; color: var(--fg-muted); margin-top: 15px; }
 
-        .progress-bar-animated {
-            animation: progress-bar-stripes 1s linear infinite;
-        }
-
-        /* Offline specific */
-        .retry-countdown {
-            font-size: 14px;
-            color: var(--secondary-color);
-            margin-top: 15px;
-        }
-
-        /* Responsive */
         @media (max-width: 576px) {
-            .error-container {
-                padding: 40px 25px;
-            }
-
-            .error-code {
-                font-size: 56px;
-            }
-
-            .error-title {
-                font-size: 22px;
-            }
-
-            .error-icon {
-                width: 100px;
-                height: 100px;
-                font-size: 40px;
-            }
-
-            .error-actions {
-                flex-direction: column;
-            }
-
-            .btn-custom {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            }
-
-            .error-container {
-                background: #1e1e2d;
-            }
-
-            .error-title {
-                color: #e0e0e0;
-            }
-
-            .error-message {
-                color: #a0a0a0;
-            }
-
-            .btn-outline-custom {
-                border-color: #3a3a4a;
-                color: #e0e0e0;
-            }
-
-            .btn-outline-custom:hover {
-                background: #2a2a3a;
-                border-color: #4a4a5a;
-                color: #e0e0e0;
-            }
-
-            .error-details {
-                border-top-color: #3a3a4a;
-            }
-
-            .error-details p {
-                color: #a0a0a0;
-            }
-
-            .error-details code {
-                background: #2a2a3a;
-                color: #e0e0e0;
-            }
+            .error-container { padding: 40px 25px; }
+            .error-code { font-size: 56px; }
+            .error-title { font-size: 22px; }
+            .error-icon { width: 96px; height: 96px; font-size: 38px; }
+            .error-actions { flex-direction: column; }
+            .btn-custom { width: 100%; justify-content: center; }
         }
     </style>
 </head>
-<body>
+<body class="template error-body">
     <div class="error-container">
         <?php
         $iconClass = 'error-500'; // default
@@ -328,7 +261,7 @@ $baseUrl = rtrim($baseUrl, '/');
         <?php if ($isMaintenance): ?>
         <div class="maintenance-progress">
             <div class="progress" style="height: 8px;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%; background: linear-gradient(135deg, #36b9cc, #1a8a9a);"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%; background: linear-gradient(135deg, var(--info), var(--primary));"></div>
             </div>
             <small class="text-muted mt-2 d-block">We'll be back soon!</small>
         </div>

@@ -4,7 +4,8 @@ $topbarUserName = $session->get('name', $session->get('first_name', 'User'));
 $topbarUserEmail = $session->get('email', '');
 
 // Get web settings (loaded by layout.php via web_settings.php)
-global $siteName, $siteLogoUrl, $primaryColor;
+global $siteName, $siteLogoUrl, $primaryColor, $darkModeEnabled;
+$_topbarInitIcon = !empty($darkModeEnabled) ? 'fa-sun' : 'fa-moon';
 ?>
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
@@ -17,6 +18,25 @@ global $siteName, $siteLogoUrl, $primaryColor;
 
     <!-- Spacer -->
     <div class="ms-auto"></div>
+
+    <!-- Dark-mode Toggle -->
+    <button type="button" class="btn-theme-toggle me-2" id="themeToggleBtn"
+            data-action="toggleTheme" data-prevent-default
+            aria-label="Toggle dark mode" title="Toggle dark mode">
+        <i class="fas <?= $_topbarInitIcon ?>"></i>
+    </button>
+    <script nonce="<?= csp_nonce() ?>">
+        // Sync icon with actual active theme (localStorage may have overridden the server default)
+        (function () {
+            var btn = document.getElementById('themeToggleBtn');
+            if (!btn) return;
+            var theme = document.documentElement.getAttribute('data-theme');
+            var icon = btn.querySelector('i, svg');
+            if (!icon) return;
+            if (theme === 'dark') { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); }
+            else { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); }
+        })();
+    </script>
 
     <!-- User Dropdown -->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">

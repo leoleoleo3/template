@@ -27,7 +27,13 @@ if (!isset($pageContent)) {
 <!DOCTYPE html>
 <html lang="en">
     <?php include_once __DIR__ . '/header.php'; ?>
-    <body class="sb-nav-fixed">
+    <body class="sb-nav-fixed template" data-theme="<?= $_darkDefault ?>">
+        <script nonce="<?= csp_nonce() ?>">
+            (function () {
+                var t = document.documentElement.getAttribute('data-theme');
+                if (t === 'dark' || t === 'light') document.body.setAttribute('data-theme', t);
+            })();
+        </script>
         <!-- Loading Overlay -->
         <div id="loadingOverlay" class="loading-overlay">
             <div class="loading-spinner">
@@ -126,6 +132,26 @@ if (!isset($pageContent)) {
             window.addEventListener('beforeunload', function() {
                 showLoading('Loading...');
             });
+
+            // Dark-mode toggle (wired via data-action="toggleTheme" on the topbar button)
+            window.toggleTheme = function () {
+                var cur = document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+                var next = cur === 'dark' ? 'light' : 'dark';
+                document.body.setAttribute('data-theme', next);
+                document.documentElement.setAttribute('data-theme', next);
+                try { localStorage.setItem('template_theme', next); } catch (e) {}
+                var btn = document.getElementById('themeToggleBtn');
+                if (btn) {
+                    var svg = btn.querySelector('svg, i');
+                    if (svg) {
+                        if (next === 'dark') {
+                            svg.classList.remove('fa-moon'); svg.classList.add('fa-sun');
+                        } else {
+                            svg.classList.remove('fa-sun'); svg.classList.add('fa-moon');
+                        }
+                    }
+                }
+            };
         </script>
 
         <!-- Event Delegation Layer (CSP-safe replacement for all inline onclick/onchange) -->

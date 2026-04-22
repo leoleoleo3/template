@@ -1,0 +1,128 @@
+/* ============================================================
+   TEMPLATE DESIGN SYSTEM — Foundations
+   ------------------------------------------------------------
+   Template is a PHP admin template (Bootstrap 5 + FontAwesome +
+   SB Admin layout). Primary color is themable per-tenant via
+   web_settings; the default is Bootstrap blue #0d6efd.
+
+   All tokens below are semantic. To reskin a tenant, override
+   --primary (and --primary-dark) on :root via header.php inline
+   style block (which interpolates $primaryColor from the DB).
+   ============================================================ */
+
+:root {
+  /* Brand / primary — runtime-overridden in header.php per tenant */
+  --primary:       #0d6efd;
+  --primary-dark:  #0a58ca;
+  --primary-600:   #0b5ed7;
+  --primary-rgb:   13, 110, 253;
+
+  /* Bootstrap semantic carryovers — Template uses these 1:1 */
+  --success: #198754;
+  --info:    #0dcaf0;
+  --warning: #ffc107;
+  --danger:  #dc3545;
+  --secondary: #6c757d;
+
+  /* Neutrals (SB Admin palette) */
+  --gray-50:  #f8f9fa;
+  --gray-100: #f1f3f5;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+
+  /* Semantic surfaces */
+  --bg:          #f2f6fc;      /* page body behind cards */
+  --surface:     #ffffff;      /* cards, modals, inputs */
+  --surface-alt: #f8f9fa;      /* striped rows, input bg */
+  --sidenav-bg:  #212529;      /* dark sidebar — runtime overridden */
+  --sidenav-fg:  #adb5bd;
+  --sidenav-fg-active: #ffffff;
+  --topbar-bg:   #212529;      /* runtime overridden */
+  --topbar-fg:   #ffffff;
+
+  /* User-configured chrome colors — filled from settings in header.php.
+     These act as placeholders so dark-mode.css can read them back. */
+  --sidenav-bg-user: var(--sidenav-bg);
+  --topbar-bg-user:  var(--topbar-bg);
+
+  --fg:        #212529;
+  --fg-muted:  #6c757d;
+  --fg-subtle: #adb5bd;
+
+  --border:      #dee2e6;
+  --border-focus: var(--primary);
+
+  /* Login / error page gradient — defaults fall back to primary in header.php */
+  --login-hero-start: var(--primary);
+  --login-hero-end:   var(--primary-dark);
+  --login-stripe: rgba(255, 255, 255, 0.03);
+
+  /* Elevation — Bootstrap shadow set */
+  --shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
+  --shadow:    0 .5rem 1rem rgba(0,0,0,.15);
+  --shadow-lg: 0 1rem 3rem rgba(0,0,0,.175);
+  --shadow-card: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
+
+  /* Radii */
+  --radius-sm: .25rem;
+  --radius:    .375rem;
+  --radius-lg: .5rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 50rem;
+
+  /* Spacing — Bootstrap 4px base (.25rem) */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 3rem;
+
+  /* Layout */
+  --sidenav-w: 225px;
+  --topbar-h: 56px;
+
+  /* Typography */
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+
+  --text-xs:   .75rem;
+  --text-sm:   .875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.75rem;
+  --text-4xl:  2rem;
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 800;
+}
+
+/* .template helper — apply to <body> on every page */
+.template, .template * { box-sizing: border-box; }
+.template {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+.template .eyebrow {
+  font-size: .7rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+.template code, .template .mono { font-family: var(--font-mono); font-size: .9em; }
